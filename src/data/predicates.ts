@@ -99,6 +99,13 @@ const PREDICATE_FORMS: Record<string, PredicateForm> = {
   subConceptOf: 'phrase',
   oppositeOf: 'phrase',
   about: 'phrase',
+  hasSkill: 'phrase',
+  operatedBy: 'passive',
+  reportedFor: 'phrase',
+  evaluatedBy: 'passive',
+  hasValue: 'phrase',
+  hasRole: 'phrase',
+  sameAs: 'phrase',
   // Everything else defaults to 'third-person-singular'.
 };
 
@@ -108,6 +115,8 @@ const SOFTWARE_TYPES = ['SoftwareSourceCode', 'SoftwareApplication', 'MobileAppl
 const CREATIVE_WORK_TYPES = ['Article', 'NewsArticle', 'Book', 'Movie', 'TVSeries', 'MusicRecording', 'MusicAlbum', 'PodcastSeries', 'PodcastEpisode'];
 /** All organization-like type IDs */
 const ORG_TYPES = ['Organization', 'LocalBusiness', 'Brand'];
+/** Concept type IDs introduced by the ecosystem apps (taxonomy-capable, like DefinedTerm) */
+const ECOSYSTEM_CONCEPT_TYPES = ['Skill', 'Idea', 'Value'];
 
 /**
  * Per-predicate semantic group and within-group priority.
@@ -180,6 +189,17 @@ const PREDICATE_SEMANTICS: Record<string, { group: PredicateSemanticGroup; prior
   relatedTo:       { group: 'Taxonomy & Classification', priority: 2 },
   subConceptOf:    { group: 'Taxonomy & Classification', priority: 3 },
   oppositeOf:      { group: 'Taxonomy & Classification', priority: 4 },
+
+  operatedBy:      { group: 'Identity & Trust', priority: 4 },
+  opposes:         { group: 'Identity & Trust', priority: 5 },
+  reportedFor:     { group: 'Identity & Trust', priority: 6 },
+  hasValue:        { group: 'Identity & Trust', priority: 7 },
+  hasRole:         { group: 'Membership & Work', priority: 8 },
+  hasSkill:        { group: 'Interests & Expertise', priority: 4 },
+  evaluatedBy:     { group: 'Social & Endorsement', priority: 10 },
+  provides:        { group: 'Commerce & Products', priority: 7 },
+  proxies:         { group: 'Blockchain & Onchain', priority: 5 },
+  sameAs:          { group: 'Taxonomy & Classification', priority: 5 },
 };
 
 /**
@@ -190,26 +210,26 @@ const PREDICATE_SEMANTICS: Record<string, { group: PredicateSemanticGroup; prior
  */
 const PREDICATE_DEFINITIONS: PredicateDefinition[] = [
   // ─── Person → Person ──────────────────────────────────────
-  { id: 'trusts', label: 'trusts', description: 'Subject places trust in object', subjectTypes: ['Person', ...ORG_TYPES], objectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'Product', 'Service', 'WebSite', 'DefinedTerm', 'Place', 'Event', 'EthereumAccount', 'EthereumSmartContract', 'EthereumERC20', 'Thing'] },
+  { id: 'trusts', label: 'trusts', description: 'Subject places trust in object', subjectTypes: ['Person', ...ORG_TYPES, 'AIAgent'], objectTypes: ['Person', ...ORG_TYPES, 'AIAgent', 'Community', ...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'Product', 'Service', 'WebSite', 'DefinedTerm', 'Place', 'Event', 'EthereumAccount', 'EthereumSmartContract', 'EthereumERC20', 'Thing'] },
   { id: 'follows', label: 'follows', description: 'Subject follows or subscribes to object', subjectTypes: ['Person'], objectTypes: ['Person', ...ORG_TYPES, 'MusicGroup'] },
   { id: 'knows', label: 'knows', description: 'Subject has a personal connection with object', subjectTypes: ['Person'], objectTypes: ['Person'] },
-  { id: 'endorses', label: 'endorses', description: 'Subject endorses or vouches for object', subjectTypes: ['Person'], objectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES, 'Product', 'Service'] },
+  { id: 'endorses', label: 'endorses', description: 'Subject endorses or vouches for object', subjectTypes: ['Person'], objectTypes: ['Person', ...ORG_TYPES, 'AIAgent', ...SOFTWARE_TYPES, 'Product', 'Service'] },
   { id: 'recommends', label: 'recommends', description: 'Subject recommends object to others', subjectTypes: ['Person'], objectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'Product', 'Service', 'Event', 'WebSite', 'Thing'] },
 
   // ─── Person → Organization ────────────────────────────────
-  { id: 'memberOf', label: 'memberOf', description: 'Subject is a member of organization', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES, 'MusicGroup'] },
-  { id: 'founderOf', label: 'founderOf', description: 'Subject founded the organization', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES] },
+  { id: 'memberOf', label: 'memberOf', description: 'Subject is a member of organization', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES, 'Community', 'MusicGroup'] },
+  { id: 'founderOf', label: 'founderOf', description: 'Subject founded the organization', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES, 'Community'] },
   { id: 'worksAt', label: 'worksAt', description: 'Subject is employed by organization', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES] },
   { id: 'contributorTo', label: 'contributorTo', description: 'Subject contributes to project or org', subjectTypes: ['Person'], objectTypes: [...ORG_TYPES, ...SOFTWARE_TYPES, 'Dataset'] },
 
   // ─── Person → Abstract ────────────────────────────────────
   { id: 'interestedIn', label: 'interestedIn', description: 'Subject has interest in concept', subjectTypes: ['Person'], objectTypes: ['DefinedTerm', 'Thing'] },
-  { id: 'expertIn', label: 'expertIn', description: 'Subject has deep expertise in area', subjectTypes: ['Person'], objectTypes: ['DefinedTerm', 'Thing'] },
-  { id: 'advocates', label: 'advocates', description: 'Subject publicly supports concept', subjectTypes: ['Person', ...ORG_TYPES], objectTypes: ['DefinedTerm', 'Thing'] },
+  { id: 'expertIn', label: 'expertIn', description: 'Subject has deep expertise in area', subjectTypes: ['Person'], objectTypes: ['DefinedTerm', 'Skill', 'Thing'] },
+  { id: 'advocates', label: 'advocates', description: 'Subject publicly supports concept', subjectTypes: ['Person', ...ORG_TYPES], objectTypes: ['DefinedTerm', 'Value', 'Thing'] },
 
   // ─── Person → Software/Thing ──────────────────────────────
-  { id: 'uses', label: 'uses', description: 'Subject uses the software or tool', subjectTypes: ['Person', ...ORG_TYPES], objectTypes: [...SOFTWARE_TYPES, 'Product', 'Service', 'Thing'] },
-  { id: 'created', label: 'created', description: 'Subject created the object', subjectTypes: ['Person'], objectTypes: [...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'ImageObject', 'VideoObject', 'Dataset', 'WebSite', 'Product', 'Thing'] },
+  { id: 'uses', label: 'uses', description: 'Subject uses the software or tool', subjectTypes: ['Person', ...ORG_TYPES, 'AIAgent', ...SOFTWARE_TYPES], objectTypes: [...SOFTWARE_TYPES, 'Product', 'Service', 'EthereumSmartContract', 'Thing'] },
+  { id: 'created', label: 'created', description: 'Subject created the object', subjectTypes: ['Person'], objectTypes: [...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'ImageObject', 'VideoObject', 'Dataset', 'WebSite', 'Product', 'Community', 'Idea', 'Thing'] },
   { id: 'likes', label: 'likes', description: 'Subject likes or favors object', subjectTypes: ['Person'], objectTypes: ['Thing', ...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'MusicGroup', 'ImageObject', 'VideoObject', 'Product', 'Place', 'Event', 'WebSite', 'DefinedTerm'] },
   { id: 'reviewed', label: 'reviewed', description: 'Subject has reviewed object', subjectTypes: ['Person'], objectTypes: ['Thing', ...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'Product', 'Service', 'Event'] },
 
@@ -246,9 +266,9 @@ const PREDICATE_DEFINITIONS: PredicateDefinition[] = [
   { id: 'createdBy', label: 'createdBy', description: 'Software was created by person or org', subjectTypes: [...SOFTWARE_TYPES], objectTypes: ['Person', ...ORG_TYPES] },
   { id: 'developedBy', label: 'developedBy', description: 'Software is developed by org', subjectTypes: [...SOFTWARE_TYPES], objectTypes: [...ORG_TYPES] },
   { id: 'maintainedBy', label: 'maintainedBy', description: 'Software is maintained by org or person', subjectTypes: [...SOFTWARE_TYPES], objectTypes: ['Person', ...ORG_TYPES] },
-  { id: 'taggedWith', label: 'taggedWith', description: 'Entity is tagged with concept or label', subjectTypes: [...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, 'ImageObject', 'VideoObject', 'Dataset', 'Product', 'Event', 'Thing'], objectTypes: ['DefinedTerm', 'Thing'] },
-  { id: 'implements', label: 'implements', description: 'Software implements concept or standard', subjectTypes: [...SOFTWARE_TYPES], objectTypes: ['DefinedTerm'] },
-  { id: 'dependsOn', label: 'dependsOn', description: 'Software depends on another', subjectTypes: [...SOFTWARE_TYPES], objectTypes: [...SOFTWARE_TYPES] },
+  { id: 'taggedWith', label: 'taggedWith', description: 'Entity is tagged with concept or label', subjectTypes: [...SOFTWARE_TYPES, ...CREATIVE_WORK_TYPES, ...ECOSYSTEM_CONCEPT_TYPES, 'Community', 'ImageObject', 'VideoObject', 'Dataset', 'Product', 'Event', 'Thing'], objectTypes: ['DefinedTerm', 'Thing'] },
+  { id: 'implements', label: 'implements', description: 'Software implements concept or standard', subjectTypes: [...SOFTWARE_TYPES], objectTypes: ['DefinedTerm', 'Idea'] },
+  { id: 'dependsOn', label: 'dependsOn', description: 'Software depends on another', subjectTypes: [...SOFTWARE_TYPES], objectTypes: [...SOFTWARE_TYPES, 'Service'] },
   { id: 'alternativeTo', label: 'alternativeTo', description: 'Software is alternative to another', subjectTypes: [...SOFTWARE_TYPES], objectTypes: [...SOFTWARE_TYPES] },
   { id: 'forkOf', label: 'forkOf', description: 'Software is a fork of another', subjectTypes: ['SoftwareSourceCode'], objectTypes: ['SoftwareSourceCode'] },
 
@@ -259,9 +279,9 @@ const PREDICATE_DEFINITIONS: PredicateDefinition[] = [
   { id: 'tokenOf', label: 'tokenOf', description: 'Token belongs to a project or protocol', subjectTypes: ['EthereumERC20'], objectTypes: [...ORG_TYPES, ...SOFTWARE_TYPES, 'Thing'] },
 
   // ─── Creative Work → * ────────────────────────────────────
-  { id: 'authoredBy', label: 'authoredBy', description: 'Work was authored/created by', subjectTypes: [...CREATIVE_WORK_TYPES], objectTypes: ['Person'] },
+  { id: 'authoredBy', label: 'authoredBy', description: 'Work was authored/created by', subjectTypes: [...CREATIVE_WORK_TYPES, 'Idea'], objectTypes: ['Person'] },
   { id: 'publishedBy', label: 'publishedBy', description: 'Work was published by', subjectTypes: [...CREATIVE_WORK_TYPES, 'WebSite'], objectTypes: [...ORG_TYPES, 'Person'] },
-  { id: 'about', label: 'about', description: 'Work is about this topic', subjectTypes: [...CREATIVE_WORK_TYPES, 'SocialMediaPosting', 'Comment', 'Review', 'PodcastEpisode'], objectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES, 'DefinedTerm', 'Event', 'Product', 'Thing'] },
+  { id: 'about', label: 'about', description: 'Work is about this topic', subjectTypes: [...CREATIVE_WORK_TYPES, 'SocialMediaPosting', 'Comment', 'Review', 'PodcastEpisode', 'Idea'], objectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES, 'DefinedTerm', 'Event', 'Product', 'Thing'] },
 
   // ─── Social → * ───────────────────────────────────────────
   { id: 'replyTo', label: 'replyTo', description: 'Post or comment is a reply to another', subjectTypes: ['Comment', 'SocialMediaPosting'], objectTypes: ['SocialMediaPosting', 'Comment', 'Article', 'Thing'] },
@@ -272,12 +292,26 @@ const PREDICATE_DEFINITIONS: PredicateDefinition[] = [
   { id: 'soldBy', label: 'soldBy', description: 'Product or service is sold by', subjectTypes: ['Product', 'Service'], objectTypes: [...ORG_TYPES] },
 
   // ─── Web → * ──────────────────────────────────────────────
-  { id: 'hostedBy', label: 'hostedBy', description: 'Website or page hosted by org', subjectTypes: ['WebSite', 'WebPage'], objectTypes: [...ORG_TYPES, 'Person'] },
+  { id: 'hostedBy', label: 'hostedBy', description: 'Website, page, or service hosted by org or person', subjectTypes: ['WebSite', 'WebPage', 'Service'], objectTypes: [...ORG_TYPES, 'Person'] },
 
   // ─── DefinedTerm → * ──────────────────────────────────────
-  { id: 'relatedTo', label: 'relatedTo', description: 'Entity is related to another', subjectTypes: ['DefinedTerm', 'Thing'], objectTypes: ['DefinedTerm', 'Thing'] },
-  { id: 'subConceptOf', label: 'subConceptOf', description: 'Term is a sub-concept of another', subjectTypes: ['DefinedTerm'], objectTypes: ['DefinedTerm'] },
-  { id: 'oppositeOf', label: 'oppositeOf', description: 'Term is opposite to another', subjectTypes: ['DefinedTerm'], objectTypes: ['DefinedTerm'] },
+  { id: 'relatedTo', label: 'relatedTo', description: 'Entity is related to another', subjectTypes: ['DefinedTerm', ...ECOSYSTEM_CONCEPT_TYPES, 'Thing'], objectTypes: ['DefinedTerm', ...ECOSYSTEM_CONCEPT_TYPES, 'Thing'] },
+  { id: 'subConceptOf', label: 'subConceptOf', description: 'Term is a sub-concept of another', subjectTypes: ['DefinedTerm', 'Skill', 'Value'], objectTypes: ['DefinedTerm', 'Skill', 'Value'] },
+  { id: 'oppositeOf', label: 'oppositeOf', description: 'Term is opposite to another', subjectTypes: ['DefinedTerm', 'Value'], objectTypes: ['DefinedTerm', 'Value'] },
+
+  // ─── Ecosystem apps (agents, skills, communities, values) ─
+  // Predicates grounded in how the intuition-box ecosystem apps use the
+  // protocol. See src/data/ecosystem-ontologies.ts for the per-app registry.
+  { id: 'hasSkill', label: 'hasSkill', description: 'Agent or person possesses this skill or capability', subjectTypes: ['Person', 'AIAgent'], objectTypes: ['Skill'] },
+  { id: 'provides', label: 'provides', description: 'Subject offers a service, tool, or capability to others', subjectTypes: ['Person', ...ORG_TYPES, ...SOFTWARE_TYPES], objectTypes: ['Service', 'Skill', 'Product'] },
+  { id: 'operatedBy', label: 'operatedBy', description: 'Agent is operated by a person, org, or account', subjectTypes: ['AIAgent'], objectTypes: ['Person', ...ORG_TYPES, 'EthereumAccount'] },
+  { id: 'opposes', label: 'opposes', description: 'Subject actively opposes or counter-signals object', subjectTypes: ['Person', ...ORG_TYPES, 'AIAgent'], objectTypes: ['Person', ...ORG_TYPES, 'AIAgent'] },
+  { id: 'reportedFor', label: 'reportedFor', description: 'Entity is flagged for a concern category (scam, spam, …)', subjectTypes: ['Person', ...ORG_TYPES, 'AIAgent', ...SOFTWARE_TYPES, 'EthereumAccount', 'EthereumSmartContract'], objectTypes: ['DefinedTerm'] },
+  { id: 'evaluatedBy', label: 'evaluatedBy', description: 'Entity was reviewed or assessed by an evaluator', subjectTypes: ['AIAgent', ...SOFTWARE_TYPES], objectTypes: ['AIAgent', 'Person', ...ORG_TYPES] },
+  { id: 'hasValue', label: 'hasValue', description: 'Organization or community stands for this value', subjectTypes: [...ORG_TYPES, 'Community'], objectTypes: ['Value'] },
+  { id: 'hasRole', label: 'hasRole', description: 'Person or agent holds this role', subjectTypes: ['Person', 'AIAgent'], objectTypes: ['DefinedTerm'] },
+  { id: 'proxies', label: 'proxies', description: 'Contract forwards calls to another contract', subjectTypes: ['EthereumSmartContract'], objectTypes: ['EthereumSmartContract'] },
+  { id: 'sameAs', label: 'sameAs', description: 'Subject and object identify the same underlying entity', subjectTypes: ['Person', ...ORG_TYPES, 'AIAgent', 'EthereumAccount', 'EthereumSmartContract', 'WebSite', 'Thing'], objectTypes: ['Person', ...ORG_TYPES, 'AIAgent', 'EthereumAccount', 'EthereumSmartContract', 'WebSite', 'Thing'] },
 
   // ─── Generic ──────────────────────────────────────────────
   { id: 'isA', label: 'isA', description: 'Entity is an instance of type/concept', subjectTypes: ['Thing', 'Person', ...ORG_TYPES, ...SOFTWARE_TYPES, 'Product', 'Service'], objectTypes: ['DefinedTerm', 'Thing'] },
