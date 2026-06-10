@@ -10,7 +10,8 @@ export type AtomCategory =
   | 'generic'
   | 'commerce'
   | 'social'
-  | 'web';
+  | 'web'
+  | 'skill';
 
 export interface SchemaField {
   name: string;
@@ -56,6 +57,7 @@ export const ATOM_CATEGORIES: Record<AtomCategory, { label: string; color: strin
   commerce: { label: 'Commerce', color: '#14b8a6' },
   social: { label: 'Social', color: '#e879f9' },
   web: { label: 'Web', color: '#38bdf8' },
+  skill: { label: 'Skill', color: '#f472b6' },
 };
 
 /**
@@ -186,6 +188,29 @@ export const ATOM_TYPES: AtomType[] = [
       { name: 'capabilities', type: 'string[]', required: false, description: 'What the agent can do (tool use, code exec, browsing…)' },
       { name: 'url', type: 'string', required: false, description: 'Canonical URL or API endpoint' },
       { name: 'description', type: 'string', required: false, description: 'Human-readable description' },
+    ],
+  },
+  {
+    id: 'Community',
+    label: 'Community',
+    // schema.org has no Community type — modeled as a custom atom adjacent to
+    // Organization. Introduced for ecosystem apps that organize people around
+    // shared interest rather than formal structure (Atlas community directory).
+    schemaOrgType: null,
+    pluginId: 'community',
+    category: 'identity',
+    description:
+      'A group of people gathered around shared interests, goals, or values — looser than a formal Organization. Members join, hold roles, and build reputation inside it.',
+    onchainFields: [
+      { name: 'name', type: 'string', required: true, description: 'Community name' },
+      { name: 'url', type: 'string', required: false, description: 'Community home URL' },
+      { name: 'sameAs', type: 'string[]', required: false, description: 'Canonical reference URLs' },
+    ],
+    enrichmentFields: [
+      { name: 'description', type: 'string', required: false, description: 'What the community is about' },
+      { name: 'handle', type: 'string', required: false, description: 'Short routable handle' },
+      { name: 'foundingDate', type: 'string', required: false, description: 'When the community formed' },
+      { name: 'logo', type: 'string', required: false, description: 'Logo image URL' },
     ],
   },
 
@@ -732,6 +757,28 @@ export const ATOM_TYPES: AtomType[] = [
     ],
   },
 
+  // ─── Skill ─────────────────────────────────────────────────
+  {
+    id: 'Skill',
+    label: 'Skill',
+    // schema.org has no Skill type. Introduced for the ecosystem's agent and
+    // reputation apps: AgentID capabilities, AgentScore "has agent skill"
+    // attestations, and MCP server tools all resolve to this concept.
+    schemaOrgType: null,
+    pluginId: 'skill',
+    category: 'skill',
+    description:
+      'A capability that a person, AI agent, or tool possesses or provides — e.g. "Code Generation", "Solidity Auditing". Skill atoms are the object of capability attestations.',
+    onchainFields: [
+      { name: 'name', type: 'string', required: true, description: 'Skill name' },
+      { name: 'description', type: 'string', required: true, description: 'What the skill covers' },
+    ],
+    enrichmentFields: [
+      { name: 'category', type: 'string', required: false, description: 'Skill category (e.g. data-processing, code-generation, analysis)' },
+      { name: 'url', type: 'string', required: false, description: 'Reference URL' },
+    ],
+  },
+
   // ─── Abstract ──────────────────────────────────────────────
   {
     id: 'DefinedTerm',
@@ -747,6 +794,48 @@ export const ATOM_TYPES: AtomType[] = [
     enrichmentFields: [
       { name: 'broader', type: 'string', required: false, description: 'Parent concept' },
       { name: 'related', type: 'string[]', required: false, description: 'Related terms' },
+    ],
+  },
+  {
+    id: 'Idea',
+    label: 'Idea',
+    // schema.org has no Idea type. Introduced for the ideation workflow:
+    // intuition-ideation-skill drafts product ideas, publishes them to the
+    // intuition-box/ideas repo, and mints them as atoms.
+    schemaOrgType: null,
+    pluginId: 'idea',
+    category: 'abstract',
+    description:
+      'A proposed product or protocol concept — drafted, challenged, and published before any implementation exists. Apps that later ship can claim to implement it.',
+    onchainFields: [
+      { name: 'name', type: 'string', required: true, description: 'Idea title' },
+      { name: 'description', type: 'string', required: true, description: 'What the idea proposes' },
+    ],
+    enrichmentFields: [
+      { name: 'author', type: 'string', required: false, description: 'Who proposed it' },
+      { name: 'url', type: 'string', required: false, description: 'Canonical writeup URL (e.g. ideas repo PR)' },
+      { name: 'datePublished', type: 'string', required: false, description: 'When it was published' },
+      { name: 'status', type: 'string', required: false, description: 'Lifecycle status (draft, published, implemented)' },
+    ],
+  },
+  {
+    id: 'Value',
+    label: 'Value',
+    // schema.org has no Value type. Introduced for the Values platform:
+    // organizations and communities propose value atoms and stake for or
+    // against them via triple vaults.
+    schemaOrgType: null,
+    pluginId: 'value',
+    category: 'abstract',
+    description:
+      'A principle an organization or community claims to stand for — e.g. "Transparency", "Decentralization". Value atoms are the object of stake-voted "has value" claims.',
+    onchainFields: [
+      { name: 'name', type: 'string', required: true, description: 'Value name' },
+      { name: 'description', type: 'string', required: true, description: 'What living this value means' },
+    ],
+    enrichmentFields: [
+      { name: 'broader', type: 'string', required: false, description: 'Parent value or principle' },
+      { name: 'related', type: 'string[]', required: false, description: 'Related values' },
     ],
   },
 

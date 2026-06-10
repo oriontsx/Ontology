@@ -28,6 +28,7 @@ export const ATOM_HIERARCHY: HierarchyNode = {
       children: [
         { id: 'LocalBusiness', label: 'Local Business', category: 'identity' },
         { id: 'MusicGroup', label: 'Music Group', category: 'creative-work' },
+        { id: 'Community', label: 'Community', category: 'identity' },
       ],
     },
     {
@@ -114,8 +115,21 @@ export const ATOM_HIERARCHY: HierarchyNode = {
       category: 'social',
     },
     {
+      id: 'Skill',
+      label: 'Skill',
+      category: 'skill',
+    },
+    {
       id: 'DefinedTerm',
       label: 'Defined Term',
+      category: 'abstract',
+      children: [
+        { id: 'Value', label: 'Value', category: 'abstract' },
+      ],
+    },
+    {
+      id: 'Idea',
+      label: 'Idea',
       category: 'abstract',
     },
     {

@@ -72,4 +72,25 @@ export const EXAMPLE_CLAIMS: Record<string, ExampleClaim[]> = {
   SoftwareApplication: [
     { subject: 'MetaMask Extension', subjectType: 'SoftwareApplication', predicateId: 'developedBy', predicateLabel: 'developedBy', object: 'ConsenSys', objectType: 'Organization' },
   ],
+  AIAgent: [
+    { subject: 'AliceBot', subjectType: 'AIAgent', predicateId: 'hasSkill', predicateLabel: 'hasSkill', object: 'Code Generation', objectType: 'Skill' },
+    { subject: 'AliceBot', subjectType: 'AIAgent', predicateId: 'operatedBy', predicateLabel: 'operatedBy', object: 'Alice Johnson', objectType: 'Person' },
+    { subject: 'AliceBot', subjectType: 'AIAgent', predicateId: 'evaluatedBy', predicateLabel: 'evaluatedBy', object: 'BobBot', objectType: 'AIAgent' },
+  ],
+  Skill: [
+    { subject: 'Solidity Auditing', subjectType: 'Skill', predicateId: 'subConceptOf', predicateLabel: 'subConceptOf', object: 'Security', objectType: 'Skill' },
+    { subject: 'Code Generation', subjectType: 'Skill', predicateId: 'taggedWith', predicateLabel: 'taggedWith', object: 'AI', objectType: 'DefinedTerm' },
+  ],
+  Community: [
+    { subject: 'Intuition Builders', subjectType: 'Community', predicateId: 'hasValue', predicateLabel: 'hasValue', object: 'Transparency', objectType: 'Value' },
+    { subject: 'Intuition Builders', subjectType: 'Community', predicateId: 'taggedWith', predicateLabel: 'taggedWith', object: 'Web3', objectType: 'DefinedTerm' },
+  ],
+  Idea: [
+    { subject: 'Onchain Reputation Passport', subjectType: 'Idea', predicateId: 'authoredBy', predicateLabel: 'authoredBy', object: 'Alice Johnson', objectType: 'Person' },
+    { subject: 'Onchain Reputation Passport', subjectType: 'Idea', predicateId: 'about', predicateLabel: 'about', object: 'Reputation', objectType: 'DefinedTerm' },
+  ],
+  Value: [
+    { subject: 'Transparency', subjectType: 'Value', predicateId: 'oppositeOf', predicateLabel: 'oppositeOf', object: 'Opacity', objectType: 'Value' },
+    { subject: 'Decentralization', subjectType: 'Value', predicateId: 'relatedTo', predicateLabel: 'relatedTo', object: 'Censorship Resistance', objectType: 'Value' },
+  ],
 };
