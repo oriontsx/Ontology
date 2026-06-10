@@ -506,5 +506,111 @@ export const GLOSSARY_ATOMS: GlossaryAtom[] = [
     conceptGroup: 'identity',
     description: 'Expresses that subject and object are different identifiers for the same underlying entity. Classic schema.org sameAs pattern. Use when one identifier may be mutable and another is immutable. The triple survives changes to the mutable side.',
   },
+
+  // ─── Ecosystem apps (Mission 04) ───────────────────────────
+  // Pre-existing mainnet atoms verified via the indexer and reused by the
+  // intuition-box ecosystem ontologies (see src/data/ecosystem-ontologies.ts
+  // and scripts/publish-ontology.mjs). Registered here so app schemas keep
+  // reusing one canonical atom per concept instead of minting duplicates.
+
+  {
+    address: '0x0471b733d120dc48dfa20eeaa24d1bcb0fb4477d975d5ccc7748dc8eb8d3f7a7',
+    label: 'endorses',
+    kind: 'predicate',
+    form: 'third-person-singular',
+    conceptGroup: 'endorse',
+    description: 'Subject publicly approves of or vouches for object. Used by Atlas member attestations and AgentID agent endorsements: [Person] — endorses — [Person/Agent].',
+  },
+  {
+    address: '0xe489948c4bd4fa6f50f402434996b90942ab67585a71c71d81dff8e624f661d4',
+    label: 'is member of',
+    kind: 'predicate',
+    form: 'phrase',
+    conceptGroup: 'member',
+    description: 'Subject is a member of object (organization, community, group). Atlas community membership pattern: [Person] — is member of — [Community].',
+  },
+  {
+    address: '0x36168c95e4ad03ad3c70031f5a7e6133ee36abff638638d41da0aaa068e7e460',
+    label: 'has value',
+    kind: 'predicate',
+    form: 'phrase',
+    conceptGroup: 'value',
+    description: 'Subject stands for object as a principle. The Values platform pattern: [Organization] — has value — [Value], ranked by stake on the triple vs its counter-triple.',
+  },
+  {
+    address: '0x996e3fb300e4b5fa825f59d33e46c7ea5a001ca65e8b506bc2e6c3e85f702314',
+    label: 'provides',
+    kind: 'predicate',
+    form: 'third-person-singular',
+    conceptGroup: 'provide',
+    description: 'Subject offers object (service, tool, capability) to others. Used for MCP servers providing tools and node operators providing RPC endpoints.',
+  },
+  {
+    address: '0x242e3be1ffd75a94d07e8d42bf53f75ca36ba5e8f2c23117c397857d5b8c1865',
+    label: 'develops',
+    kind: 'predicate',
+    form: 'third-person-singular',
+    conceptGroup: 'develop',
+    description: 'Subject (creator, org) actively develops object (software, product). Active counterpart of `developed by`.',
+  },
+  {
+    address: '0x1e4fb6f9dc4f9d83aff58fb7bbd08b77ebf32c52fb12eb6b7c340049d06e4db6',
+    label: 'developed by',
+    kind: 'predicate',
+    form: 'passive',
+    conceptGroup: 'develop',
+    description: 'Subject (software, app) is developed by object (org, person). Used to attribute ecosystem apps to Intuition Box: [App] — developed by — [Intuition Box].',
+  },
+  {
+    address: '0x5a959cdd3493fb6335c315df14eb35edb7f2cc578ccae899a89c0f7f330239eb',
+    label: 'created by',
+    kind: 'predicate',
+    form: 'passive',
+    conceptGroup: 'create',
+    description: 'Subject was originally created or brought into existence by object. Passive counterpart of `created`.',
+  },
+  {
+    address: '0x957beb2e34369c31c05a83dd43b7361bae62ce27aa799d731e7b24bd4ede7d7b',
+    label: 'deployed on',
+    kind: 'predicate',
+    form: 'phrase',
+    conceptGroup: 'deploy',
+    description: 'Subject (contract, app) is deployed on object (chain, network). Fee proxy pattern: [Smart Contract] — deployed on — [Intuition].',
+  },
+  {
+    address: '0xbc35e0e2300b869802c1d76928417fc4c5446bf2d61a60f774b178c2a6d7b00b',
+    label: 'Intuition Box',
+    kind: 'entity',
+    conceptGroup: 'intuition-box',
+    description: 'The Intuition Box builder sub-DAO — the organization behind the intuition-box ecosystem apps. Anchor entity for [App] — belongs to / developed by — [Intuition Box] claims.',
+  },
+  {
+    address: '0x3bc738a1ffacf08c0b53077b7467fa025e11137d236bc60eae21530342d50557',
+    label: 'AI Agent',
+    kind: 'entity',
+    conceptGroup: 'ai-agent',
+    description: 'The AI agent concept — autonomous software actors. Type anchor for agent registry rules such as [AI Agent] — has agent skill — [Skill].',
+  },
+  {
+    address: '0xba57c5daf6c9b8b7821406db1bff01427b385a4a041f2ddd5cf004e80949610c',
+    label: 'Skill',
+    kind: 'entity',
+    conceptGroup: 'skill',
+    description: 'The skill/capability concept. Type anchor for capability attestations by AgentID, AgentScore, and MCP tool registries.',
+  },
+  {
+    address: '0x9813a2accf94000ab0fd7bb7bbed4698099eed24d5e9805ea6136fe48cfb9830',
+    label: 'Community',
+    kind: 'entity',
+    conceptGroup: 'community',
+    description: 'The community concept — a group gathered around shared interests or values. Type anchor for Atlas membership rules.',
+  },
+  {
+    address: '0x3a9975dff190314abfb2f36b2a6c42775fc024bae587e7cdc17528465453655f',
+    label: 'Base',
+    kind: 'entity',
+    conceptGroup: 'base',
+    description: 'The Base L2 network. The Intuition L3 settles to Base; RPC replica nodes sync from a Base RPC endpoint.',
+  },
 ];
 /* eslint-enable @stylistic/max-len */
