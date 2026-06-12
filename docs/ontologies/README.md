@@ -103,7 +103,7 @@ DRY=0 PRIVATE_KEY=0x… node scripts/publish-ontology.mjs    # mainnet
 
 The script is idempotent: reused atoms are pre-verified term_ids, created atoms pin deterministic IPFS data and are skipped via `isTermCreated` on re-runs, and every triple is existence-checked via `calculateTripleId` before creation.
 
-Dry run against mainnet (2026-06-10): **27 new atoms** (10 app + 10 type + 7 predicate), **28 reused atoms**, **110 triples** (42 rules + 22 attributions + 46 app→rule links), `getAtomCost` = `getTripleCost` = 0.1 TRUST → **≈ 13.7 TRUST total** plus negligible gas.
+Dry run against mainnet (2026-06-10): **27 new atoms** (11 app + 9 type + 7 predicate), **28 reused atoms**, **110 triples** (42 rules + 22 attributions + 46 app→rule links), `getAtomCost` = `getTripleCost` = 0.1 TRUST → **≈ 13.7 TRUST total** plus negligible gas.
 
 After a mainnet publish, append the newly created term_ids to `glossary-atoms.ts` so the glossary stays the canonical reuse index.
 
